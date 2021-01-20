@@ -1,6 +1,6 @@
-function About() {
+function About(props) {
     return (
-        <h1>About!</h1>
+        <h1>About {props.name}!</h1>
     );
 }
 
