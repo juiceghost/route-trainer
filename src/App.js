@@ -1,10 +1,19 @@
 import Navigation from './Navigation';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import styled from 'styled-components';
 
 import About from './About';
 import Contact from './Contact';
 import Projects from './Projects';
 import Home from './Home';
+
+//import './App.css';
+
+const StyledAbout = styled(About)`
+height: 150px;
+background-color: aquamarine;
+`
+
 
 function App() {
     return (
@@ -13,7 +22,7 @@ function App() {
             <Navigation />
             <Switch>
                 <Route path='/about'>
-                    <About name='Krille' />
+                    <StyledAbout name='Krille' />
                 </Route>
                 <Route path='/projects'>
                     <Projects />
