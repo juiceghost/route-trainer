@@ -6,6 +6,7 @@ import About from './About';
 import Contact from './Contact';
 import Projects from './Projects';
 import Home from './Home';
+import Weather from './Weather';
 
 //import './App.css';
 
@@ -19,6 +20,7 @@ function App() {
     return (
         <Router>
             <div>Welcome to React-router!</div>
+            <Weather />
             <Navigation />
             <Switch>
                 <Route path='/about'>
