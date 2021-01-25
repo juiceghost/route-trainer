@@ -7,6 +7,7 @@ import Contact from './Contact';
 import Projects from './Projects';
 import Home from './Home';
 import Weather from './Weather';
+import WeatherHook from './WeatherHook';
 
 //import './App.css';
 
@@ -20,7 +21,8 @@ function App() {
     return (
         <Router>
             <div>Welcome to React-router!</div>
-            <Weather />
+            {/* <Weather /> */}
+            <WeatherHook />
             <Navigation />
             <Switch>
                 <Route path='/about'>
