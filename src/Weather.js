@@ -19,8 +19,10 @@ class Weather extends Component {
     }
 
     render() {
+        //const temperature = this.state.data.main.feels_like.toFixed(1);
+
         console.log("Hej från Weathers render");
-        return (<span>Weather</span>)
+        return (<span>It feels like {this.state.data ? this.state.data.main.feels_like.toFixed(1) : '?'} °C in Stockholm right now.</span>)
     }
 
 }
