@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const weatherMalmo = {
     "data": {
@@ -94,48 +94,48 @@ const weatherUppsala = {
 
 const weatherGoteborg = {
     "data": {
-    "coord": {
-        "lon": 11.9668,
-        "lat": 57.7072
-    },
-    "weather": [
-        {
-            "id": 800,
-            "main": "Clear",
-            "description": "clear sky",
-            "icon": "01d"
-        }
-    ],
-    "base": "stations",
-    "main": {
-        "temp": 4.5,
-        "feels_like": 0.2,
-        "temp_min": 2,
-        "temp_max": 6.67,
-        "pressure": 1015,
-        "humidity": 80
-    },
-    "visibility": 10000,
-    "wind": {
-        "speed": 3.6,
-        "deg": 220
-    },
-    "clouds": {
-        "all": 0
-    },
-    "dt": 1616400053,
-    "sys": {
-        "type": 1,
-        "id": 1746,
-        "country": "SE",
-        "sunrise": 1616389699,
-        "sunset": 1616434175
-    },
-    "timezone": 3600,
-    "id": 2711537,
-    "name": "Gothenburg",
-    "cod": 200
-} 
+        "coord": {
+            "lon": 11.9668,
+            "lat": 57.7072
+        },
+        "weather": [
+            {
+                "id": 800,
+                "main": "Clear",
+                "description": "clear sky",
+                "icon": "01d"
+            }
+        ],
+        "base": "stations",
+        "main": {
+            "temp": 4.5,
+            "feels_like": 0.2,
+            "temp_min": 2,
+            "temp_max": 6.67,
+            "pressure": 1015,
+            "humidity": 80
+        },
+        "visibility": 10000,
+        "wind": {
+            "speed": 3.6,
+            "deg": 220
+        },
+        "clouds": {
+            "all": 0
+        },
+        "dt": 1616400053,
+        "sys": {
+            "type": 1,
+            "id": 1746,
+            "country": "SE",
+            "sunrise": 1616389699,
+            "sunset": 1616434175
+        },
+        "timezone": 3600,
+        "id": 2711537,
+        "name": "Gothenburg",
+        "cod": 200
+    }
 }
 
 //console.log(weatherUppsala);
@@ -163,23 +163,57 @@ const weatherGoteborg = {
 const weatherArr = [weatherUppsala, weatherMalmo, weatherGoteborg]
 
 let resultArr = [];
+//let tempObj = {};
 
 for (let i = 0; i < weatherArr.length; i++) {
     // "öva på nested destructuring"
     let name = weatherArr[i].data.name;
     let temp = weatherArr[i].data.main.temp;
     let wind = weatherArr[i].data.wind;
-    
-    console.log(name)
-    console.log(temp)
-    console.log(wind)
 
-    // se till att resultArr innehåller data enligt formatet ovan
-    // använd datan från variablerna name, temp och wind
+    resultArr.push({ [name]: { temp: temp, wind: wind } });
 }
 
-console.log(resultArr)
+//let newResult = weatherArr.map(({ data: { name, wind, main: { temp } } }) => ({ [name]: { temp, wind } }) )
+let newResult = weatherArr.map(({ data: { name, wind, main: { temp } } }) => ({ name, temp, wind }))
 
-const CachedData = () => (<h1>Cached Data</h1>);
+console.log(newResult)
+/*
+const CachedData = () => (
+    <>
+    <h1>Cached Data</h1>
+    <ul>
+    {newResult.map((item, index) => <li key={index}>{item.name} has {item.temp.toFixed(1)} degrees right now. {(item.wind.speed > 3) && `It's windy`} </li>)}
+    </ul>
+    </>
+);
+*/
+const CachedData = () => {
+    const [result, setResult] = useState(newResult)
+
+    const handleChange = (name) => {
+        console.log(name);
+    }
+
+    // Vid klick på HIDE skall handleChange i CachedData's scope köras.
+    // överkurs: jag vill att motsvarande name som hör till raden där knappen sitter skrivs ut
+
+    return (
+        <>
+            <h1>Cached Data</h1>
+            <WeatherList data={result} />
+        </>
+    )
+}
+
+const WeatherList = ({ data }) => (
+    <ul>
+        {data.map((item, index) => (<WeatherItem key={index} item={item} />))}
+    </ul>
+);
+
+const WeatherItem = ({ item }) => (
+    <li>{item.name} has {item.temp.toFixed(1)} degrees right now. {(item.wind.speed > 3) && `It's windy`} <button>HIDE</button></li>
+)
 
 export default CachedData;
