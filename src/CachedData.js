@@ -153,7 +153,8 @@ const weatherGoteborg = {
         temp: 2.83,
         wind: {speed: 3.06, deg: 180}
     },
-    'Gothenburg': {
+    {
+        name: 'Gothenburg'
         temp: 4.5,
         wind: {speed: 3.6, deg: 220}
     }
@@ -175,7 +176,7 @@ for (let i = 0; i < weatherArr.length; i++) {
 }
 
 //let newResult = weatherArr.map(({ data: { name, wind, main: { temp } } }) => ({ [name]: { temp, wind } }) )
-let newResult = weatherArr.map(({ data: { name, wind, main: { temp } } }) => ({ name, temp, wind }))
+let newResult = weatherArr.map(({ data: { name, wind, main: { temp } } }, index) => ({ name, temp, wind, index }))
 
 console.log(newResult)
 /*
@@ -193,7 +194,12 @@ const CachedData = () => {
 
     const handleChange = (name) => {
         console.log(name);
+        // filtrera bort det elementet vars name-key överrenstämmer med det name vi får in
+        let filteredResult = result.filter(item => !(item.name === name));
+        setResult(filteredResult)
     }
+
+    const resetHidden = () => setResult(newResult);
 
     // Vid klick på HIDE skall handleChange i CachedData's scope köras.
     // överkurs: jag vill att motsvarande name som hör till raden där knappen sitter skrivs ut
@@ -201,19 +207,22 @@ const CachedData = () => {
     return (
         <>
             <h1>Cached Data</h1>
-            <WeatherList data={result} />
+            <WeatherList data={result} handleChange={handleChange} />
+            <button onClick={resetHidden}>RESET</button>
         </>
     )
 }
 
-const WeatherList = ({ data }) => (
+const WeatherList = ({ data, handleChange }) => (
     <ul>
-        {data.map((item, index) => (<WeatherItem key={index} item={item} />))}
+        {data.map(item => (<WeatherItem handleChange={handleChange} key={item.index} item={item} />))}
     </ul>
 );
 
-const WeatherItem = ({ item }) => (
-    <li>{item.name} has {item.temp.toFixed(1)} degrees right now. {(item.wind.speed > 3) && `It's windy`} <button>HIDE</button></li>
+const WeatherItem = ({ item, handleChange }) => (
+    <li>{item.name} has {item.temp.toFixed(1)} degrees right now. {(item.wind.speed > 3) && `It's windy`}
+        <button onClick={(event) => handleChange(item.name)}>HIDE</button>
+    </li>
 )
 
 export default CachedData;
