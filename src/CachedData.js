@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import WeatherGraph from './WeatherGraph';
+
 const timestamp = Date.now()
 const oneDay = 86400000;
 
@@ -555,26 +557,30 @@ const weatherGoteborg = [{
 
 /*
 [{
-    'Malmo': {
+    {
+        name: 'Malmo'
         temp: 4.11,
+        timestamp: 59435984,
         wind: {speed: 2.06, deg: 280}
     },
-    'Uppsala County':
     {
+        name: 'Uppsala County'
         temp: 2.83,
+        timestamp: 59435984,
         wind: {speed: 3.06, deg: 180}
     },
     {
         name: 'Gothenburg'
         temp: 4.5,
+        timestamp: 59435984,
         wind: {speed: 3.6, deg: 220}
     }
 }]
 */
-/*
-const weatherArr = [weatherUppsala, weatherMalmo, weatherGoteborg]
 
-let resultArr = [];
+const weatherArr = [...weatherUppsala, ...weatherMalmo, ...weatherGoteborg]
+
+let anewResult = [];
 //let tempObj = {};
 
 for (let i = 0; i < weatherArr.length; i++) {
@@ -582,12 +588,13 @@ for (let i = 0; i < weatherArr.length; i++) {
     let name = weatherArr[i].data.name;
     let temp = weatherArr[i].data.main.temp;
     let wind = weatherArr[i].data.wind;
+    let timestamp = weatherArr[i].data.timestamp;
 
-    resultArr.push({ [name]: { temp: temp, wind: wind } });
+    anewResult.push({ name: name, temp: temp, wind: wind, timestamp: timestamp });
 }
 
-//let newResult = weatherArr.map(({ data: { name, wind, main: { temp } } }) => ({ [name]: { temp, wind } }) )
-let newResult = weatherArr.map(({ data: { name, wind, main: { temp } } }, index) => ({ name, temp, wind, index }))
+//let newResult = weatherArr.map(({ data: { name, wind, main: { temp } } }) => ({ [name]: { temp, wind } }))
+let newResult = weatherArr.map(({ data: { timestamp, name, wind, main: { temp } } }, index) => ({ timestamp, name, temp, wind, index }))
 
 console.log(newResult)
 /*
@@ -601,7 +608,7 @@ const CachedData = () => (
 );
 */
 const CachedData = () => {
-    const [result, setResult] = useState([])
+    const [result, setResult] = useState(newResult)
 
     const handleChange = (name) => {
         console.log(name);
@@ -610,7 +617,7 @@ const CachedData = () => {
         setResult(filteredResult)
     }
 
-    const resetHidden = () => setResult([]);
+    const resetHidden = () => setResult(newResult);
 
     // Vid klick på HIDE skall handleChange i CachedData's scope köras.
     // överkurs: jag vill att motsvarande name som hör till raden där knappen sitter skrivs ut
@@ -618,8 +625,10 @@ const CachedData = () => {
     return (
         <>
             <h1>Cached Data</h1>
+            <WeatherGraph />
             <WeatherList data={result} handleChange={handleChange} />
             <button onClick={resetHidden}>RESET</button>
+
         </>
     )
 }
