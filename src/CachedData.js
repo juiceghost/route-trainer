@@ -581,8 +581,6 @@ const weatherGoteborg = [{
 const weatherArr = [...weatherUppsala, ...weatherMalmo, ...weatherGoteborg]
 
 let anewResult = [];
-//let tempObj = {};
-
 for (let i = 0; i < weatherArr.length; i++) {
     // "öva på nested destructuring"
     let name = weatherArr[i].data.name;
@@ -592,11 +590,82 @@ for (let i = 0; i < weatherArr.length; i++) {
 
     anewResult.push({ name: name, temp: temp, wind: wind, timestamp: timestamp });
 }
-
 //let newResult = weatherArr.map(({ data: { name, wind, main: { temp } } }) => ({ [name]: { temp, wind } }))
 let newResult = weatherArr.map(({ data: { timestamp, name, wind, main: { temp } } }, index) => ({ timestamp, name, temp, wind, index }))
-
 console.log(newResult)
+
+const createXAxisLabels = (dataArr) => {
+    // scanna igenom datan efter timestamps
+    // konvertera varje timestamp till en datumsträng
+    // returnerna en array med datumsträngarna 
+    let timestampArr = []
+    for (let i = 0; i < dataArr.length; i++) {
+        let timestamp = new Date(dataArr[i].timestamp).toLocaleDateString();
+        timestampArr.push(timestamp)
+    }
+    let unique = [...new Set(timestampArr)];
+    return unique
+}
+//console.log(createXAxisLabels(newResult));
+let chartData = {};
+chartData.labels = createXAxisLabels(newResult);
+
+const getCities = (dataArr) => {
+    let cityArr = []
+    for (let i = 0; i < dataArr.length; i++) {
+        let city = dataArr[i].name;
+        cityArr.push(city)
+    }
+    let unique = [...new Set(cityArr)];
+    return unique
+}
+// console.log(getCities(newResult));
+
+const createDatasets = (dataArr) => {
+
+    let originalData = {
+        label: 'Uppsala County',
+        fill: false,
+        lineTension: 0.1,
+        backgroundColor: 'rgba(75,192,192,0.4)',
+        borderColor: 'rgba(75,192,192,1)',
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderJoinStyle: 'miter',
+        pointBorderColor: 'rgba(75,192,192,1)',
+        pointBackgroundColor: '#fff',
+        pointBorderWidth: 1,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+        pointHoverBorderColor: 'rgba(220,220,220,1)',
+        pointHoverBorderWidth: 2,
+        pointRadius: 1,
+        pointHitRadius: 10,
+        data: [4.11, 5.51, 6.88, 3.11]
+    };
+    let cities = getCities(dataArr); // ['Uppsala County', 'Malmo'..]
+    let datasetArr = [];
+    for (let i = 0; i < cities.length; i++) {
+        //console.log(cities[i]);
+        let filteredArr = dataArr.filter(item => item.name === cities[i])
+        let temperatureArr = filteredArr.map(item => item.temp);
+        console.log(temperatureArr)
+        //console.log(filteredArr)
+        originalData.label = cities[i];
+        originalData.data = temperatureArr
+        console.log(originalData)
+        datasetArr.push({ ...originalData })
+    }
+    return datasetArr
+
+    // givet en dataarray in,
+    // ta reda på alla unika städer
+    // för varje stad, hitta de datapunkter som hör till den staden
+    // bygg en array av detta, samt bygg det slutgiltiga dataset-objektet
+    // bygg en dataset array av alla dataset-objekt 
+}
+console.log(createDatasets(newResult));
 /*
 const CachedData = () => (
     <>
