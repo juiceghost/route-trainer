@@ -54,8 +54,8 @@ const WeatherGraph = (props) => {
 
     return (
         <div>
-            <h2>Line Example</h2>
-            <Line data={data} />
+            <h2>Your cities</h2>
+            <Line data={props.data} />
         </div>
     );
 }

@@ -577,7 +577,7 @@ const weatherGoteborg = [{
     }
 }]
 */
-
+// first transformation functions start
 const weatherArr = [...weatherUppsala, ...weatherMalmo, ...weatherGoteborg]
 
 let anewResult = [];
@@ -593,7 +593,9 @@ for (let i = 0; i < weatherArr.length; i++) {
 //let newResult = weatherArr.map(({ data: { name, wind, main: { temp } } }) => ({ [name]: { temp, wind } }))
 let newResult = weatherArr.map(({ data: { timestamp, name, wind, main: { temp } } }, index) => ({ timestamp, name, temp, wind, index }))
 console.log(newResult)
+// first transformation functions end
 
+// chart transformation helper functions start
 const createXAxisLabels = (dataArr) => {
     // scanna igenom datan efter timestamps
     // konvertera varje timestamp till en datumsträng
@@ -606,9 +608,6 @@ const createXAxisLabels = (dataArr) => {
     let unique = [...new Set(timestampArr)];
     return unique
 }
-//console.log(createXAxisLabels(newResult));
-let chartData = {};
-chartData.labels = createXAxisLabels(newResult);
 
 const getCities = (dataArr) => {
     let cityArr = []
@@ -665,7 +664,18 @@ const createDatasets = (dataArr) => {
     // bygg en array av detta, samt bygg det slutgiltiga dataset-objektet
     // bygg en dataset array av alla dataset-objekt 
 }
-console.log(createDatasets(newResult));
+
+// chart transformation functions end
+
+// chart transformation function
+const createChartData = (dataArr) => {
+    let chartData = {};
+    chartData.labels = createXAxisLabels(newResult);
+    chartData.datasets = createDatasets(newResult)
+    return chartData
+}
+
+//console.log(createDatasets(newResult));
 /*
 const CachedData = () => (
     <>
@@ -694,7 +704,7 @@ const CachedData = () => {
     return (
         <>
             <h1>Cached Data</h1>
-            <WeatherGraph />
+            <WeatherGraph data={createChartData(newResult)} />
             <WeatherList data={result} handleChange={handleChange} />
             <button onClick={resetHidden}>RESET</button>
 
