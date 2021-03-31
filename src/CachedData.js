@@ -619,6 +619,7 @@ const getCities = (dataArr) => {
     return unique
 }
 // console.log(getCities(newResult));
+const colorArray = ['rgba(75,192,192,1)', 'rgba(247,234,81,1)', 'rgba(158, 71, 159,1)']
 
 const createDatasets = (dataArr) => {
 
@@ -653,6 +654,9 @@ const createDatasets = (dataArr) => {
         //console.log(filteredArr)
         originalData.label = cities[i];
         originalData.data = temperatureArr
+        originalData.borderColor = colorArray[i];
+        originalData.backgroundColor = colorArray[i];
+        originalData.pointBorderColor = colorArray[i];
         console.log(originalData)
         datasetArr.push({ ...originalData })
     }
