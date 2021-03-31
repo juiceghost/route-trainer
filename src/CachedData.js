@@ -619,7 +619,25 @@ const getCities = (dataArr) => {
     return unique
 }
 // console.log(getCities(newResult));
-const colorArray = ['rgba(75,192,192,1)', 'rgba(247,234,81,1)', 'rgba(158, 71, 159,1)']
+const colorArray = [
+    {
+        backgroundColor: 'rgba(247,234,81,1)', 
+        borderColor: 'rgba(247,234,81,1)', 
+        pointBorderColor: 'rgba(247,234,81,1)', 
+        pointHoverBackgroundColor: 'rgba(247,234,81,1)'
+    },
+    {
+        backgroundColor: 'rgba(75,192,192,1)', 
+        borderColor: 'rgba(75,192,192,1)', 
+        pointBorderColor: 'rgba(75,192,192,1)', 
+        pointHoverBackgroundColor: 'rgba(75,192,192,1)'
+    },
+    { 
+        backgroundColor: 'rgba(158, 71, 159,1)', 
+        borderColor: 'rgba(158, 71, 159,1)', 
+        pointBorderColor: 'rgba(158, 71, 159,1)', 
+        pointHoverBackgroundColor: 'rgba(158, 71, 159,1)'
+    }];
 
 const createDatasets = (dataArr) => {
 
@@ -652,11 +670,13 @@ const createDatasets = (dataArr) => {
         let temperatureArr = filteredArr.map(item => item.temp);
         console.log(temperatureArr)
         //console.log(filteredArr)
-        originalData.label = cities[i];
-        originalData.data = temperatureArr
-        originalData.borderColor = colorArray[i];
-        originalData.backgroundColor = colorArray[i];
-        originalData.pointBorderColor = colorArray[i];
+        let cityTempObj = { label: cities[i], data: temperatureArr }
+        //originalData.label = cities[i];
+        //originalData.data = temperatureArr
+        Object.assign(originalData, cityTempObj, colorArray[i])
+        //originalData.borderColor = colorArray[i];
+        //originalData.backgroundColor = colorArray[i];
+        //originalData.pointBorderColor = colorArray[i];
         console.log(originalData)
         datasetArr.push({ ...originalData })
     }
